@@ -6,20 +6,26 @@ When the e-mail is retrieved, the workflow will parse the information to only ke
 Later, it will query AMP for GUID using the IP address from the e-mail. Once the the workflow has AMP GUID (which is the identifier of the endpoint in AMP) it will check the isolation status of the endpoint to make sure it is not isolated already. 
 If not, it will isolate it and notify through Webex Team
 
-[https://youtu.be/nY9nWVrgO4I](https://youtu.be/nY9nWVrgO4I)
+[https://youtu.be/3dW6_CYSGR4](https://youtu.be/3dW6_CYSGR4)
 
 
 ## Configure 
 
 * Configure e-mail in Stealthwatch Cloud : 
+In Stealthwatch Cloud --> Top Right wheel --> Services/Webhooks --> E-mail 
 
+* Import the JSON file in SecureX : 
+In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC/AMP Remediation JSON File
 
+* Target to Configure 
+    --> AMP for Endpoint Account 
+    
+* Account Keys to Configure : 
+    --> Mailbox used 
+    --> AMP Credentials 
+    
+* Variables 
+   --> Webex Team key 
+   
+   
 
-
-
-
-
-
-* Minor update from version v4.0 that creates 4 group objects in instead of 2. 
-* It now creates 2 URL group objects for Optimize+Allow and for Default category, and does the same for the IP group objects.
-* [WARNING] It adds a dummy IP range (240.0.0.0/4) or dummy URL (example.com), if Microsoft does not return any addresses. Microsoft does not always return full lists. Sometimes they only return the Default URL’s for example, since they don’t own those IP ranges. This can cause a Policy Deploy failure, hence the dummy addresses.
