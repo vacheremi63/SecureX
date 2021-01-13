@@ -1,0 +1,239 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01GQLW43M6VCA6mxXxYIrfNth0ogFVGxY3g",
+    "name": "SecureX Cloud Analytics Azure",
+    "title": "SecureX Cloud Analytics Azure",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "output",
+          "name": "SWC Email ",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01ILTG77BMJCR3sPuyPMuxAZXOGQ8baUD5W",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "display_name": "SecureX Cloud Analytics Azure",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "no_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01GQMW7IOTFWV0yBN2fqwIE0Fil76smrWWD",
+        "name": "Match Regular Expression",
+        "title": "Match internal IP",
+        "type": "core.matchregex",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Match internal IP",
+          "input_regex": "\\d+\\.\\d+\\.\\d+\\.\\d+",
+          "input_string": "$global.variable_01ILTENCNJ6DH6eY1nzeXsFF3kpfcymd2b6.global.variable_01ILTENCNJ6DH6eY1nzeXsFF3kpfcymd2b6$",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01I4V9BNIEV9Y4UwpjA3kkGDxxQYnFybeiw",
+        "name": "Get Access Token",
+        "title": "Get Access Token",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Get Access Token",
+          "input": {
+            "variable_workflow_018W1VUA3KTDR4leKu2VnHhK7kMVcesWJNv": "$env.variable_01I4VCQPIX6Q73Og8hL5m1r9MwytBoVOtYB.env.variable_01I4VCQPIX6Q73Og8hL5m1r9MwytBoVOtYB$",
+            "variable_workflow_018W1VUA3L1GE2JsoKRwanAYxLvwjhV9fvx": "2f2c76a0-1c45-4608-b102-0f35b36d6a02",
+            "variable_workflow_018W1VUA3LNM471jMSXhDuisWXebfwSd7ni": "$env.variable_01I4VD378DDZK3u73XBjghwsP49LojZT8ct.env.variable_01I4VD378DDZK3u73XBjghwsP49LojZT8ct$"
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01I4VM1DWR6ZH034vByNQ10InZfHUrhw6Yg",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_018W1VTC14Y4S6FF9s5cV8eU5Idji2FuN1k"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01I4UBRMACLJ91V8DJOHP8Q4xAOODXUXNg6",
+        "name": "Add Network Security Group Rule",
+        "title": "Add Network Security Group Rule",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Add Network Security Group Rule",
+          "input": {
+            "variable_workflow_01g3WO4Y0Pv0IVAtf0GeFKmoqRYisqHdb": "Deny",
+            "variable_workflow_01g3WS17tBgn5LNtkbQzgE0SL2w0noG0w": "*",
+            "variable_workflow_01g3WdqSQ1FXttxL9GDuT6y8O9nkgmc0b": "TCP",
+            "variable_workflow_01g3WkFgSTd9y1GmMBSjrd3tJaqVtMzUK": "$activity.definition_activity_01GQMW7IOTFWV0yBN2fqwIE0Fil76smrWWD.output.matching_strings[0]$",
+            "variable_workflow_01g3WmNECO9oWOWJZxlNQvzllEUUEWle0": "*",
+            "variable_workflow_01g3vLS32lZSa1RdZTti3Bxzthznu9Cyz": "2020-06-01",
+            "variable_workflow_01g3vVFyp7KijMwdSyIyBFD5rHkD53ITu": "eastus",
+            "variable_workflow_01g3vZeDAKhKMlunczYs72C85Yf72geeo": "SWC_test",
+            "variable_workflow_01g3vcsoTtxAAsqhCOdiXsJzeYLxdYRDw": "f76d469f-2666-4b52-964e-ee929d35ef5d",
+            "variable_workflow_01g3veDfyuLWKgFnuTsSectkYI9qSUahF": "ResourceGroup-Transit",
+            "variable_workflow_01g3vhkZMW6HU4FScnXCKzDm3QZs5pj9W": "JumpHost-nsg",
+            "variable_workflow_01g3w4hRcBBPkc8yHbiL4PUpjlkt2uXaB": "*",
+            "variable_workflow_01g3w9lpZ4DTkxGEqdhQHugLW1eXxgduq": 400,
+            "variable_workflow_01g3wCnAroVN3rXhmpvxKuCKwbq7pb4M9": "Outbound",
+            "variable_workflow_01gDv6J6cAGFrrTGyc35hagHZv0YyF1rd": "$activity.definition_activity_01I4V9BNIEV9Y4UwpjA3kkGDxxQYnFybeiw.output.variable_workflow_018W1VUA3L5N81quTYfLOIZVs8VqjbX9OBT$"
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01I4VWKUXHWO237vwV4or6pyMgix5jNRM5f",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01g3Vyt4QmWXxHEAqGsKdIPekI3JdVRPO"
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01GQOG3SJVSD20ubgYrJpPFdXAYpuC7wmCE",
+        "name": "Webex Teams - Send Message to User",
+        "title": "Webex Teams - Send Message to User",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Webex Teams - Send Message to User",
+          "input": {
+            "variable_workflow_01FHS2UP7FNRI3hQkE9KFPLzxq1MuyZ7i4C": "$global.variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv.global.variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv$",
+            "variable_workflow_01FHS2UP7FU767Yf512VoXF8Vx7cfmiRwBX": "rvacher@cisco.com",
+            "variable_workflow_01FHS2UP7FVZC424MqvtAy88gIvi4VfEK6z": "",
+            "variable_workflow_01FHS2UP7FX4H1ncjCzr9yKoe4mkm3DnEfx": "Your Azure host with IP $activity.definition_activity_01GQMW7IOTFWV0yBN2fqwIE0Fil76smrWWD.output.matching_strings[0]$ has got added to a new restricted NSG",
+            "variable_workflow_01FNN77D7KAVX4MlMaoUnGcsoENvbUDm52H": ""
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01GO8JVZSRPK01axNzct8GA8WoPQg01CkjE",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4"
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01I4VM1DWR6ZH034vByNQ10InZfHUrhw6Yg": {
+      "unique_name": "definition_target_01I4VM1DWR6ZH034vByNQ10InZfHUrhw6Yg",
+      "name": "AzureTarget",
+      "title": "AzureTarget",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "AzureTarget",
+        "host": "login.microsoftonline.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01I4VWKUXHWO237vwV4or6pyMgix5jNRM5f": {
+      "unique_name": "definition_target_01I4VWKUXHWO237vwV4or6pyMgix5jNRM5f",
+      "name": "Azure Target 2",
+      "title": "Azure Target 2",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "Azure Target 2",
+        "host": "management.azure.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "protocol": "https"
+      }
+    }
+  },
+  "variables": {
+    "variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv": {
+      "unique_name": "variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Webex Team ",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01I4VCQPIX6Q73Og8hL5m1r9MwytBoVOtYB": {
+      "unique_name": "variable_01I4VCQPIX6Q73Og8hL5m1r9MwytBoVOtYB",
+      "properties": {
+        "value": "*****",
+        "scope": "env",
+        "name": "Azure Client Secret",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01I4VD378DDZK3u73XBjghwsP49LojZT8ct": {
+      "unique_name": "variable_01I4VD378DDZK3u73XBjghwsP49LojZT8ct",
+      "properties": {
+        "value": "c6a1fcb3-542f-4305-946a-a5bd432f04a4",
+        "scope": "env",
+        "name": "Azure Client IDD",
+        "type": "datatype.string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01ILTENCNJ6DH6eY1nzeXsFF3kpfcymd2b6": {
+      "unique_name": "variable_01ILTENCNJ6DH6eY1nzeXsFF3kpfcymd2b6",
+      "properties": {
+        "value": "alert_id: 1717\r\nurl: https://cisco-dcloud.obsrvbl.com/#/alerts/1717\r\ntype: Excessive Access Attempts (External)\r\ndescription: Device has many failed access attempts from an external device. For example, a remote device trying repeatedly to access an internal server using SSH or Telnet would trigger this alert. The alert uses the Multiple Access Failures observation and may indicate the device is compromised.\r\ncreated: 2020-08-17T22:00:00+00:00\r\npriority: High\r\nhostname: web-servers\r\ncurrent IPs: 3.132.225.249, 3.135.118.157, 172.31.20.163, 172.31.200.52\r\n\r\nHello, this is a test from Remi\r\n${type}\r\n",
+        "scope": "global",
+        "name": "SWC Email Content Workflow",
+        "type": "datatype.string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01g3Vyt4QmWXxHEAqGsKdIPekI3JdVRPO",
+    "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4",
+    "definition_workflow_018W1VTC14Y4S6FF9s5cV8eU5Idji2FuN1k"
+  ]
+}

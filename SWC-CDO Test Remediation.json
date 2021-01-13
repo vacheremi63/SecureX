@@ -1,0 +1,351 @@
+{
+  "workflow": {
+    "unique_name": "definition_workflow_01FTPWFQOJ7TE3SJcsVpnuC4e8ZEEReN1iF",
+    "name": "SWC-CDO Test Remediation",
+    "title": "SWC-CDO Test Remediation",
+    "type": "generic.workflow",
+    "base_type": "workflow",
+    "variables": [
+      {
+        "schema_id": "datatype.secure_string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "CDO Bearer Token",
+          "type": "datatype.secure_string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01FTQACADGVAW52S2Snj2W7OGnTHmeEVMm9",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "O365",
+          "scope": "local",
+          "name": "CDO Object Group Name",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01FTQB2P3A0AI67bKapNyIDGK3IXvwEfaoq",
+        "object_type": "variable_workflow"
+      },
+      {
+        "schema_id": "datatype.string",
+        "properties": {
+          "value": "",
+          "scope": "local",
+          "name": "New Objects to Add",
+          "type": "datatype.string",
+          "is_required": false
+        },
+        "unique_name": "variable_workflow_01FUHPSH0718Q0C2U4TKSBGJGBtKMjI0CGz",
+        "object_type": "variable_workflow"
+      }
+    ],
+    "properties": {
+      "atomic": {
+        "is_atomic": false
+      },
+      "delete_workflow_instance": false,
+      "description": "1/ SWC Detecting something - Trigger Email \n2/ Extract Source IP from E-mail \n3/ Get CDO Object Group \n4/ Extract Group Components \n5/ Create CDO Network Object\n6/ Get New Object UID \n7/ Update CDO Object Group with Object UID",
+      "display_name": "SWC-CDO Test Remediation",
+      "runtime_user": {
+        "override_target_runtime_user": false,
+        "specify_on_workflow_start": false,
+        "target_default": true
+      },
+      "target": {
+        "target_type": "web-service.endpoint",
+        "target_id": "definition_target_01FTQ923ZNM472nI6YAX5EOATBrCsB6ziw5",
+        "execute_on_workflow_target": true
+      }
+    },
+    "object_type": "definition_workflow",
+    "actions": [
+      {
+        "unique_name": "definition_activity_01HX6V2LBJ36C2occkis6JeeobTg4VS4L1a",
+        "name": "Match Regex",
+        "title": "Get SWC IP to add in CDO",
+        "type": "core.matchregex",
+        "base_type": "activity",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Get SWC IP to add in CDO",
+          "input_regex": "\\d+\\.\\d+\\.\\d+\\.\\d+",
+          "input_string": "$global.variable_01IF0LDQ8HAHS0aoY0V8D5FHDoPXl6Y2n2n.global.variable_01IF0LDQ8HAHS0aoY0V8D5FHDoPXl6Y2n2n$",
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01FUEHI65Q47E6rHpJcCATslvs8FzAPoCqj",
+        "name": "HTTP Request",
+        "title": "Get the existing CDO object group",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU.global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU$"
+            }
+          ],
+          "display_name": "Get the existing CDO object group",
+          "method": "GET",
+          "relative_url": "services/targets/objects?q=name:GroupIPBlockedSWC+AND+issueType:SHARED",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01FUEI1GU4DWK0NVZhy2vZEHeCIAIZ64Yfk",
+        "name": "JSONPath Query",
+        "title": "Extract the group components",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Extract the group components",
+          "input_json": "$activity.definition_activity_01FUEHI65Q47E6rHpJcCATslvs8FzAPoCqj.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.[0].uid",
+              "jsonpath_query_name": "groupUid",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.[0].elements",
+              "jsonpath_query_name": "groupElements",
+              "jsonpath_query_type": "string"
+            },
+            {
+              "jsonpath_query": "$.[0].contents",
+              "jsonpath_query_name": "groupContents",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01FTQ8CZLJU2A1GZxNmlAr1ALrFyEfOQMTt",
+        "name": "HTTP Request",
+        "title": "Create Object in CDO",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "{\n  \"name\": \"QuarantinedIP\",\n  \"@typeName\": \"LocalObject\",\n  \"objectType\": \"NETWORK_OBJECT\",\n  \"contents\": [\n    {\n      \"@type\": \"NetworkContent\",\n      \"sourceElement\": \"$activity.definition_activity_01HX6V2LBJ36C2occkis6JeeobTg4VS4L1a.output.matching_strings[0]$\",\n      \"destinationElement\": null\n    }\n  ],\n  \"deviceType\": \"FTD\"\n}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU.global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU$"
+            }
+          ],
+          "display_name": "Create Object in CDO",
+          "method": "POST",
+          "relative_url": "services/targets/objects",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01FUHM7BDTFCF1U8x8teVqvIesZkfwy8Azl",
+        "name": "JSONPath Query",
+        "title": "Get new object UID",
+        "type": "corejava.jsonpathquery",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "continue_on_failure": false,
+          "display_name": "Get new object UID",
+          "input_json": "$activity.definition_activity_01FTQ8CZLJU2A1GZxNmlAr1ALrFyEfOQMTt.output.response_body$",
+          "jsonpath_queries": [
+            {
+              "jsonpath_query": "$.uid",
+              "jsonpath_query_name": "uid",
+              "jsonpath_query_type": "string"
+            }
+          ],
+          "skip_execution": false
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01FUHXST340624wiFWrNzuKaFlDiEZKtp5g",
+        "name": "HTTP Request",
+        "title": "Update the group in CDO",
+        "type": "web-service.http_request",
+        "base_type": "activity",
+        "properties": {
+          "action_timeout": 180,
+          "allow_auto_redirect": true,
+          "body": "{\n\"contents\": [\n{\n\"@type\": \"ObjectReferenceContent\",\n\"name\": \"IPBlockedSWC1\",\n\"uid\": \"6e3c7ba6-a10a-4750-8322-f86f0f228f82\",\n\"type\": \"NETWORK_OBJECT\"\n},\n\n{\n\"@type\": \"ObjectReferenceContent\",\n\"name\": \"QuarantinedIP\",\n\"uid\": \"$activity.definition_activity_01FUHM7BDTFCF1U8x8teVqvIesZkfwy8Azl.output.jsonpath_queries.uid$\",\n\"type\": \"NETWORK_OBJECT\"\n}\n]\n}",
+          "content_type": "application/json",
+          "continue_on_error_status_code": false,
+          "continue_on_failure": false,
+          "custom_headers": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU.global.variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU$"
+            }
+          ],
+          "display_name": "Update the group in CDO",
+          "method": "PUT",
+          "relative_url": "services/targets/objects/$activity.definition_activity_01FUEI1GU4DWK0NVZhy2vZEHeCIAIZ64Yfk.output.jsonpath_queries.groupUid$",
+          "runtime_user": {
+            "override_target_runtime_user": false,
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": false,
+            "override_workflow_target_group_criteria": false,
+            "use_workflow_target": true,
+            "use_workflow_target_group": false
+          }
+        },
+        "object_type": "definition_activity"
+      },
+      {
+        "unique_name": "definition_activity_01IF0NE1JBI9R1wBhwpLbYjTaMeaeLOrCm9",
+        "name": "Webex Teams - Send Message to User",
+        "title": "Webex Teams - Send Message to User",
+        "type": "workflow.atomic_workflow",
+        "base_type": "subworkflow",
+        "properties": {
+          "continue_on_failure": false,
+          "display_name": "Webex Teams - Send Message to User",
+          "input": {
+            "variable_workflow_01FHS2UP7FNRI3hQkE9KFPLzxq1MuyZ7i4C": "$global.variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv.global.variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv$",
+            "variable_workflow_01FHS2UP7FU767Yf512VoXF8Vx7cfmiRwBX": "rvacher@cisco.com",
+            "variable_workflow_01FHS2UP7FVZC424MqvtAy88gIvi4VfEK6z": "",
+            "variable_workflow_01FHS2UP7FX4H1ncjCzr9yKoe4mkm3DnEfx": "You have a new IP ($activity.definition_activity_01HX6V2LBJ36C2occkis6JeeobTg4VS4L1a.output.matching_strings[0]$) that has been added to your Quarantine CDO Object Group. Pending changes needs to be approved.",
+            "variable_workflow_01FNN77D7KAVX4MlMaoUnGcsoENvbUDm52H": ""
+          },
+          "runtime_user": {
+            "target_default": true
+          },
+          "skip_execution": false,
+          "target": {
+            "override_workflow_target": true,
+            "target_id": "definition_target_01GO8JVZSRPK01axNzct8GA8WoPQg01CkjE",
+            "target_type": "web-service.endpoint"
+          },
+          "workflow_id": "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4"
+        },
+        "object_type": "definition_activity"
+      }
+    ],
+    "categories": [
+      "category_1BMfMXSnJMyt5Ihqi7rWJr5N8cf"
+    ]
+  },
+  "targets": {
+    "definition_target_01FTQ923ZNM472nI6YAX5EOATBrCsB6ziw5": {
+      "unique_name": "definition_target_01FTQ923ZNM472nI6YAX5EOATBrCsB6ziw5",
+      "name": "CDO_Target",
+      "title": "CDO_Target",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "disable_certificate_validation": false,
+        "display_name": "CDO_Target",
+        "host": "defenseorchestrator.com",
+        "ignore_proxy": false,
+        "no_runtime_user": true,
+        "path": "/aegis/rest/v1/",
+        "port": 443,
+        "protocol": "https"
+      }
+    },
+    "definition_target_01GO8JVZSRPK01axNzct8GA8WoPQg01CkjE": {
+      "unique_name": "definition_target_01GO8JVZSRPK01axNzct8GA8WoPQg01CkjE",
+      "name": "Webex Teams",
+      "title": "Webex Teams",
+      "type": "web-service.endpoint",
+      "base_type": "target",
+      "object_type": "definition_target",
+      "properties": {
+        "description": "Webex Teams",
+        "disable_certificate_validation": false,
+        "display_name": "Webex Teams",
+        "host": "webexapis.com",
+        "no_runtime_user": true,
+        "port": 443,
+        "protocol": "https"
+      }
+    }
+  },
+  "variables": {
+    "variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv": {
+      "unique_name": "variable_01GQNJKFXHIQG75b31WfT5ZZV5KDBxT11bv",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "Webex Team ",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU": {
+      "unique_name": "variable_01HX7BCW7MATA6TFxGC9FhO289dHRNquXeU",
+      "properties": {
+        "value": "*****",
+        "scope": "global",
+        "name": "CDO Bearer Token ",
+        "type": "datatype.secure_string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    },
+    "variable_01IF0LDQ8HAHS0aoY0V8D5FHDoPXl6Y2n2n": {
+      "unique_name": "variable_01IF0LDQ8HAHS0aoY0V8D5FHDoPXl6Y2n2n",
+      "properties": {
+        "value": "alert_id: 1453\nurl: https://cisco-dcloud.obsrvbl.com/#/alerts/1453\ntype: Excessive Access Attempts (External)\ndescription: Device has many failed access attempts from an external device. For example, a remote device trying repeatedly to access an internal server using SSH or Telnet would trigger this alert. The alert uses the Multiple Access Failures observation and may indicate the device is compromised.\ncreated: 2020-07-21T20:00:00+00:00\npriority: High\nhostname: virtualmachines/jumpbox\ncurrent IPs: 192.168.243.114\n\nHello, this is a test from Remi\n\n${type}",
+        "scope": "global",
+        "name": "SWC Email IP",
+        "type": "datatype.string",
+        "is_required": false
+      },
+      "object_type": "variable"
+    }
+  },
+  "atomic_workflows": [
+    "definition_workflow_01FHS2UPUQNCZ0PCqtR2BcNyTpy7oPfnIV4"
+  ]
+}
