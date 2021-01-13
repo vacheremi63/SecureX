@@ -12,7 +12,7 @@ There are lots of different possible scenario here is an example :
 
 [https://www.youtube.com/watch?v=2OS3SgVVFdU](https://www.youtube.com/watch?v=2OS3SgVVFdU)
 
-![](screenshot/screenscenario)
+![](screenshot/screenscenario.png)
 
 > **Note:** Please test this properly before implementing in a production environment. This is a sample workflow!
 
@@ -31,7 +31,7 @@ In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM
 ## Required Target 
 * Target to be configured 
    --> AWS Account 
-   ![](screenshot/screentarget)
+   ![](screenshot/screentarget.png)
 
 ## Required Account Keys
 * Account Keys to be configured : 
@@ -68,8 +68,6 @@ In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM
 * Configure e-mail in Stealthwatch Cloud : 
 In Stealthwatch Cloud --> Settings --> Services/Webhooks --> E-mail 
 
-* Import the JSON file in SecureX : 
-In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM Workflow
 
 ## Notes
 
