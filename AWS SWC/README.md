@@ -68,8 +68,6 @@ In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM
 * Configure e-mail in Stealthwatch Cloud : 
 In Stealthwatch Cloud --> Settings --> Services/Webhooks --> E-mail 
 
-* Import the JSON file in SecureX : 
-In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM Workflow
 
 ## Notes
 
