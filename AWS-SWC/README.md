@@ -28,7 +28,7 @@ In Stealthwatch Cloud --> Top Right wheel --> Services/Webhooks --> E-mail
 ## Required Target 
 * Target to be configured 
    --> AWS Account 
-   ![](screenshot/screentarget.png) { width=50% }
+   ![](screenshot/screentarget.png) 
 
 ## Required Account Keys
 * Account Keys to be configured : 

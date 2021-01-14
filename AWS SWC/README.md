@@ -57,7 +57,11 @@ In Stealthwatch Cloud --> Top Right wheel --> Services/Webhooks --> E-mail
 
 1. In the left pane menu, select **Workflows**. Click on **IMPORT** to import the workflow.
 
+![](screenshot/import-workflow.png) 
+
 2. Click on **Browse** and copy paste the content of the [SWC-AWS IAM Workflow.json](https://raw.githubusercontent.com/vacheremi63/SecureX/master/AWS-SWC/SWC-AWS-IAM-Workflow.json) file inside of the text window.  Select **IMPORT AS A NEW WORKFLOW (CLONE)** and click on **IMPORT**.
+
+![](screenshot/copy-paste.png)
 
 3. Next steps, like updating targets / account keys and setting a trigger / running the workflow.
 
