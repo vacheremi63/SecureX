@@ -31,7 +31,7 @@ In SecureX --> Orchestration --> Workflows --> Import --> Browse --> SWC-AWS IAM
 ## Required Target 
 * Target to be configured 
    --> AWS Account 
-   ![](screenshot/screentarget.png)
+   ![](screenshot/screentarget.png =100x20)
 
 ## Required Account Keys
 * Account Keys to be configured : 
